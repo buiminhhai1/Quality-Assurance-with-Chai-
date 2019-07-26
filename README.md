@@ -270,6 +270,10 @@ Send {surname: 'da Verrazzano'}. Replace assert.fail() and make the test pass.
 Check for 1) status, 2) type, 3) body.name, 4) body.surname
 Follow the assertion order above, We rely on it.
 
+### 23. Run Functional Tests using a Headless Browser.  
+In the next challenges we are going to simulate the human interaction with a page using a device called "Headless Browser"
+  A headless browser is a web browser without a graphical user interface. These kind of tools are particularly useful for testing web pages as they are able to render and understand HTML, CSS, and JavaScript the same way a browser would.
+  For these challenges we are using Zombie.JS. It's a lightweight browser which is totally based on JS, without relying on additional binaries to be installed. This feature makes it useable in an environment such as Glitch.
 
 ```python
       // 19
@@ -358,6 +362,38 @@ Follow the assertion order above, We rely on it.
           
           done(); // Never forget the 'done()' callback...
         });
+        
+        // 23. 
+        test('submit "surname" : "Colombo" - write your e2e test...', function(done) {
+
+        // fill the form...
+        // then submit it pressing 'submit' button.
+        //
+        // in the callback...
+        // assert that status is OK 200
+        // assert that the text inside the element 'span#name' is 'Cristoforo'
+        // assert that the text inside the element 'span#surname' is 'Colombo'
+        // assert that the element(s) 'span#dates' exist and their count is 1
+        browser
+          .fill('surname', 'Colombo')
+          .pressButton('submit', function(){
+            
+            /** YOUR TESTS HERE, Don't forget to remove assert.fail() **/
+            // pressButton is Async.  Waits for the ajax call to complete...
+
+            // assert that status is OK 200
+            browser.assert.success();
+            // assert that the text inside the element 'span#name' is 'Cristoforo'
+            browser.assert.text("span#name", "Cristoforo");
+            // assert that the text inside the element 'span#surname' is 'Colombo'
+            browser.assert.text("span#surname", "Colombo");
+            // assert that the element(s) 'span#dates' exist and their count is 1
+            browser.assert.element("span#dates", 1);
+              
+            done();   // It's an async test, so we have to call 'done()''
+          });
+        // 
+       
       });
     });
 
