@@ -247,3 +247,118 @@ suite("Unit Tests", function(){
  **/
 });
 ```
+### 19. Run Functional Tests on API Endpoints using Chai-HTTP
+Replace assert.fail. Test the status and the text.response. Make the test pass.
+Don't send a name in the query, the endpoint with responds with 'hello Guest'.
+### 20 Run Functional Tests On API Endpoints using Chai-HTTP II
+Replace assert.fail(). Test the status and the text.response. Make the test pass.
+Send you name in the query query appending ?name=, the endpoint with responds with 'hello'.
+### 21. Run Functional Tests on an API Response using Chai-HTTP III - PUT method.
+In the next example we'll see how to send data in a request payload (body).
+We are going to test a PUT request. The '/travellers' endpoint accepts.
+a JSON object taking the structure: 
+{surname: [last name of a traveller of the past]},
+The route responds with: 
+{name: [first name], surname: [last name], dates: [birth - death years]}.
+see the server code for more details.
+Send {surname: 'Colombo'}. Replace assert.fail() and make the test pass.
+Check for 1) status, 2) type, 3)body.name, 4)body.surname
+
+### 22. Run Functional Tests on an API Response using Chai-HTTP IV - PUT method.
+This exercise is similar to the preceding. Look at it for the details.
+Send {surname: 'da Verrazzano'}. Replace assert.fail() and make the test pass.
+Check for 1) status, 2) type, 3) body.name, 4) body.surname
+Follow the assertion order above, We rely on it.
+
+
+```python
+      // 19
+      // If no name is passed, the endpoint responds with 'hello Guest'.
+      test('Test GET /hello with no name',  function(done){ // Don't forget the callback...
+         chai.request(server)             // 'server' is the Express App
+          .get('/hello')                  // http_method(url). NO NAME in the query !
+          .end(function(err, res){        // res is the response object
+          
+            // Test the status and the text response (see the example above). 
+            // Please follow the order -status, -text. We rely on that in our tests.
+            // It should respond 'Hello Guest'
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'hello Guest');
+            done();   // Always call the 'done()' callback when finished.
+          });
+      });
+      // 20
+      /**  Another one... **/
+      test('Test GET /hello with your name',  function(done){ // Don't forget the callback...
+         chai.request(server)             // 'server' is the Express App
+          .get('/hello?name=Minh Hai') /** <=== Put your name in the query **/ 
+          .end(function(err, res){        // res is the response object
+          
+            // Your tests here.
+            // Replace assert.fail(). Make the test pass.
+            // Test the status and the text response. Follow the test order like above.
+            assert.equal(res.status, 200);
+             assert.equal(res.text, 'hello Minh Hai'/** <==  Put your name here **/);
+            done();   // Always call the 'done()' callback when finished.
+          });
+      });
+      
+      // 21
+      /** Now it's your turn. Make the test pass. **/
+      // We expect the response to be
+      // {name: 'Cristoforo', surname: 'Colombo', dates: '1451 - 1506'}
+      // check the status, the type, name and surname.
+      
+      // !!!! Follow the order of the assertions in the preceding example!!!!, 
+      // we rely on it in our tests.
+      
+      test('send {surname: "Colombo"}',  function(done){
+       
+       // we setup the request for you...
+       chai.request(server)
+        .put('/travellers')
+        .send({surname: 'Colombo'})
+        /** send {surname: 'Colombo'} here **/
+        // .send({...})
+        .end(function(err, res){
+          
+          /** your tests here **/
+          assert.equal(res.status, 200, 'response status should be 200');
+          assert.equal(res.type, 'application/json', "Response should be json");
+            
+          // res.body contains the response parsed as a JS object, when appropriate
+          // (i.e the response type is JSON)
+          assert.equal(res.body.name, 'Cristoforo', 'res.body.name should be "Cristoforo"');
+          assert.equal(res.body.surname, 'Colombo', 'res.body.surname should be "Colombo"' );
+          
+          done(); // Never forget the 'done()' callback...
+        });
+      });
+      
+      // 22
+      /** Repetition is the mother of learning. **/
+      // Try it again. This time without help !!
+      test('send {surname: "da Verrazzano"}', function(done) {
+        /** place the chai-http request code here... **/
+        chai.request(server)
+        .put('/travellers')
+        .send({surname: 'da Verrazzano'})
+        /** send {surname: 'da Verrazzano'} here **/
+        // .send({...})
+        .end(function(err, res){
+          
+          /** your tests here **/
+          assert.equal(res.status, 200, 'response status should be 200');
+          assert.equal(res.type, 'application/json', "Response should be json");
+            
+          // res.body contains the response parsed as a JS object, when appropriate
+          // (i.e the response type is JSON)
+          assert.equal(res.body.name, 'Giovanni', 'res.body.name should be "Giovanni"');
+          assert.equal(res.body.surname, 'da Verrazzano', 'res.body.surname should be "da Verrazzano"' );
+          
+          done(); // Never forget the 'done()' callback...
+        });
+      });
+    });
+
+```
